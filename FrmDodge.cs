@@ -45,6 +45,7 @@ namespace Dodge_Example
 
                 //call the Planet class's drawPlanet method to draw the images
                 planet[i].DrawPlanet(g);
+               
             }
             spaceship.DrawSpaceship(g);
 
@@ -81,14 +82,35 @@ namespace Dodge_Example
         private void FrmDodge_Load(object sender, EventArgs e)
         {
             lives = int.Parse(txtLives.Text);// pass lives entered from textbox to lives variable
+            MessageBox.Show("Use the left and right arrow keys to move the spaceship. \n Don't get hit by the planets! \n Every planet that gets past scores a point. \n If a planet hits a spaceship a life is lost! \n \n Enter your Name press tab and enter the number of lives \n Click Start to begin", "Game Instructions");
+            txtName.Focus();
+
+        }
+
+        private void MnuStart_Click(object sender, EventArgs e)
+        {
+            score = 0;
+            lblScore.Text = score.ToString();
+            lives = int.Parse(txtLives.Text);// pass lives entered from textbox to lives variable
+            TmrPlanet.Enabled = true;
+            TmrShip.Enabled = true;
+
+        }
+
+        private void MnuStop_Click(object sender, EventArgs e)
+        {
+            TmrShip.Enabled = false;
+            TmrPlanet.Enabled = false;
+
         }
 
         private void TmrPlanet_Tick(object sender, EventArgs e)
         {
-            score = 0;
+           // score = 0;
             for (int i = 0; i < 7; i++)
             {
                 planet[i].MovePlanet();
+               
                 if (spaceship.spaceRec.IntersectsWith(planet[i].planetRec))
                 {
                     //reset planet[i] back to top of panel
@@ -97,9 +119,16 @@ namespace Dodge_Example
                     txtLives.Text = lives.ToString();// display number of lives
                     CheckLives();
                 }
+                //if a planet reaches the bottom of the Game Area reposition it at the top
+                if (planet[i].y >= PnlGame.Height)
+                {
+                    score += 1;//update the score
+                    lblScore.Text = score.ToString();// display score
+                    planet[i].y = 30;
 
-                score += planet[i].score;// get score from Planet class (in movePlanet method)
-                lblScore.Text = score.ToString();// display score
+                }
+                // score += planet[i].score;// get score from Planet class (in movePlanet method)
+                //lblScore.Text = score.ToString();// display score
 
             }
 
