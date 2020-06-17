@@ -39,6 +39,7 @@ namespace Dodge_Example
             planetRec.Location = new Point(x, y);
             if (planetRec.Location.Y > 400)
             {
+                score += 1;// add 1 to score when planet reaches bottom of panel
                 y = 20;
                 planetRec.Location = new Point(x, y);
             }
